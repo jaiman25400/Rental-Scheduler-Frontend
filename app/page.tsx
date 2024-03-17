@@ -1,9 +1,14 @@
-import Image from "next/image";
-
-export default function Home() {
+import React from "react";
+import Navbar from "@/components/Navbar";
+import Rentals from "@/components/Rentals";
+import Listing from "@/components/Listing";
+const Home = () => {
   return (
-    <main>
-      <p>Hello World</p>
-    </main>
+    <div>
+      <Navbar />
+      <Listing />
+    </div>
   );
-}
+};
+
+export default Home;
