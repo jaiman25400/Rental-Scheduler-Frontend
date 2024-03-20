@@ -3,27 +3,25 @@ import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 
 const UserPage: any = () => {
-  const [name, setName] = useState("");
+  const [propName, setPropName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<any | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log("Form ", file, name, description);
-
     const formData = new FormData();
-    formData.set("name", name);
-    formData.set("description", description);
-
+    formData.append("propertyName", propName);
+    formData.append("description", description);
+    // Append each file individually
     if (file) {
       for (let i = 0; i < file.length; i++) {
-        formData.set("file", file[i]);
+        formData.append("images", file[i]);
       }
     }
 
+    console.log("Files State :", file, file.length, file[0]);
+    console.log("FormData", JSON.stringify(formData));
     try {
-      console.log("Form Data", formData);
       const response = await fetch("http://localhost:3000/", {
         method: "POST",
         body: formData,
@@ -33,14 +31,14 @@ const UserPage: any = () => {
       if (response.ok) {
         console.log("Data successfully submitted!");
         // Reset form fields
-        setName("");
+        setPropName("");
         setDescription("");
         setFile(null);
       } else {
         console.error("Failed to submit data.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("API Error :", error);
     }
   };
 
@@ -58,8 +56,8 @@ const UserPage: any = () => {
               type="text"
               className="w-full px-4 py-2"
               placeholder="Enter property name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={propName}
+              onChange={(e) => setPropName(e.target.value)}
             />
           </label>
           <label className="input input-bordered flex items-center gap-2 mt-3 mb-3">

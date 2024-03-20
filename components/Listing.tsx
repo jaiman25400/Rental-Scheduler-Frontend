@@ -26,15 +26,21 @@ const Listing = async () => {
       <ul
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", // Adjust column width as needed
           gap: "1rem",
+          padding: "1rem",
         }}
       >
         {rentalsList.map((props) => (
-          <li key={props.id} style={{ maxWidth: "300px" }}>
+          <li key={props.id} style={{ height: "100%", width: "100%" }}>
             <div
-              className="card bg-base-100 shadow-xl"
-              style={{ width: "100%" }}
+              className="card mb-3 bg-white shadow-xl"
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#ffffff",
+                padding: "1rem",
+              }}
             >
               <figure>
                 {props.images?.map((image, index) => (
