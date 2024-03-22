@@ -5,11 +5,14 @@ import { Bounce, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const UserPage: any = () => {
   const [propName, setPropName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File[]>([]);
+  const [startDate, setStartDate] = useState<Date>(new Date());
 
   const router = useRouter();
 
@@ -59,10 +62,11 @@ const UserPage: any = () => {
       });
       return; // Prevent form submission
     }
-
+    console.log("Date :", startDate);
     const formData = new FormData();
     formData.append("propertyName", propName);
     formData.append("description", description);
+    formData.append("cleaningDate", startDate.toISOString());
     // Append each file individually
     file.forEach((file, index) => {
       formData.append("files", file);
@@ -156,7 +160,17 @@ const UserPage: any = () => {
             className="file-input w-full max-w-xs mb-3"
             onChange={handleFileChange}
             multiple
+            required
           />
+          <label className="input input-bordered flex items-center gap-2 mt-3 mb-3">
+            Choose Cleaning Date:
+            <DatePicker
+              selected={startDate}
+              required
+              onChange={(date: Date) => setStartDate(date)}
+              minDate={new Date()} // Set the minimum selectable date to the current date
+            />
+          </label>
           <button type="submit" className="btn btn-primary w-full">
             Submit
           </button>
