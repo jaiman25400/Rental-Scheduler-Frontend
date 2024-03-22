@@ -65,7 +65,7 @@ const UserPage: any = () => {
     formData.append("description", description);
     // Append each file individually
     file.forEach((file, index) => {
-      formData.append("images", file, file.name);
+      formData.append("files", file);
     });
 
     console.log("Files State :", file, file.length, file[0]);
