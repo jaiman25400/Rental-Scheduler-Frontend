@@ -15,20 +15,58 @@ const UserPage: any = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files ?? []);
-    setFile(selectedFiles);
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    const invalidFiles = selectedFiles.filter(
+      (file) => !allowedTypes.includes(file.type)
+    );
+    if (invalidFiles.length > 0) {
+      // Invalid file format selected
+      toast.error(
+        "🚫 Invalid file format! Only PNG, JPG, and JPEG files are allowed.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        }
+      );
+    } else {
+      // Valid files selected
+      setFile(selectedFiles);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (file.length === 0) {
+      // No file selected, display error toast
+      toast.error("Please select at least one Valid file.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      return; // Prevent form submission
+    }
+
     const formData = new FormData();
     formData.append("propertyName", propName);
     formData.append("description", description);
     // Append each file individually
-    if (file) {
-      for (let i = 0; i < file.length; i++) {
-        formData.append("images", file[i]);
-      }
-    }
+    file.forEach((file, index) => {
+      formData.append("images", file, file.name);
+    });
 
     console.log("Files State :", file, file.length, file[0]);
     const formDataEntries = Array.from(formData.entries());
